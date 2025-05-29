@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real-Time Chat</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    ul { list-style-type: none; padding: 0; }
+    li { padding: 8px 10px; background: #f2f2f2; margin-bottom: 5px; border-radius: 5px; }
+    input { padding: 10px; width: 300px; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Real-Time Chat</h2>
+  <ul id="messages"></ul>
+  <input id="m" autocomplete="off" placeholder="Type a message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    var messages = document.getElementById('messages');
+    var input = document.getElementById('m');
+
+    function sendMessage() {
+      socket.emit('chat message', input.value);
+      input.value = '';
+    }
+
+    socket.on('chat message', function(msg){
+      var item = document.createElement('li');
+      item.textContent = msg;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+</html>
